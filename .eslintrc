@@ -1,0 +1,20 @@
+{
+  "extends": "airbnb",
+  "rules": {
+    "semi": [2, "never"],
+    "import/extensions": ["always"],
+    "import/no-unresolved": ["always"],
+    "react/jsx-filename-extension": ["never"],
+    "import/prefer-default-export": ["never"],
+    "react/no-unused-prop-types": [1, "always"],
+    "max-len": ["error", { "code": 195 }],
+    "react/sort-comp": ["never"],
+    "linebreak-style": 0
+  },
+  "env": {
+    "jest/globals": true,
+    "browser": true
+  },
+  "parser": "babel-eslint",
+  "plugins": ["jest"]
+}
