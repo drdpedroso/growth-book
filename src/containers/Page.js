@@ -1,75 +1,68 @@
 import React from 'react'
-import styled from 'styled-components'
+import {Row, Wrapper, ColumnLeft, Column, Title, RowRight} from '../style'
+import CheckList from '../components/CheckListItem'
 
-const Row = styled.div`
-  flex: 1;
-  display: flex;
-  padding: 20px;
-`
+const data = [
+  {id: 1, title: 'Eat more', done: false},
+  {id: 2, title: 'Eat mor2', done: true}
+]
 
-const Wrapper = styled.div`
-  height: 100vh;
-  display: flex;
-`
+class Page extends React.PureComponent {
+  constructor(){
+    super()
 
-const Column = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-`
+    this.state = {
+      scheduled: JSON.parse(localStorage.getItem('scheduled')) || [],
+      todo: JSON.parse(localStorage.getItem('todo')) || [],
+      goals: JSON.parse(localStorage.getItem('goals')) || []
+    }
+  }
 
-const ColumnLeft = styled(Column)`
-  border-right: 2.5px solid #003cb3;
-`
 
-const RowRight = styled(Row)`
-  border-bottom: 2.5px solid #003cb3;
-`
+  onChangeItem(data, list) {
+    const dataToSave = JSON.stringify(data)
+    localStorage.setItem(list, dataToSave)
+  }
 
-const Title = styled.div`
-  font-size: 20px;
-  font-weight: bold;
-  text-transform: uppercase;
-`
+  addItem(title, column) {
+    const columnData = JSON.parse(localStorage.getItem('scheduled')) || []
+    debugger
+    const id = columnData.length + 1
+    columnData.push({id, title, done: false})
+    localStorage.setItem(column, JSON.stringify(columnData))
+    this.setState({
+      scheduled: columnData
+    })
+  }
 
-const CheckItem = styled(Row)`
-  align-items: center;
-  flex: 0;
-  padding-bottom: 0;
-`
-
-const CheckList = () => (
-  <CheckItem>
-    <input type="checkbox" />
-    <div> Leke </div>
-  </CheckItem>
-)
-
-class Page extends React.Component {
   render() {
+    const {scheduled, todo, goals} = this.state
+    console.log(scheduled)
     return (
       <Wrapper>
         <Row>
           <ColumnLeft>
             <RowRight>
               <Column>
-                <Title>Leke</Title>
-
-                <CheckList />
-                <CheckList />
-                <CheckList />
+                <Title>Scheduled</Title>
+                <Row style={{maxHeight: 40}}>
+                  <button onClick={() => this.addItem('title', 'scheduled')}>Add</button><input type="text"/>
+                </Row>
+                <CheckList data={scheduled} onChangeItem={data => this.onChangeItem(data, 'scheduled')}/>
               </Column>
             </RowRight>
             <Row>
-              <Title>Leke</Title>
+              <Title>To Do</Title>
+              <CheckList data={todo} onChangeItem={data => this.onChangeItem(data, 'todo')}/>
             </Row>
           </ColumnLeft>
           <Column>
             <RowRight>
-              <Title>Leke</Title>
+              <Title>Goals</Title>
+              <CheckList data={goals} onChangeItem={data => this.onChangeItem(data, 'goals')}/>
             </RowRight>
             <Row>
-              <Title>Leke</Title>
+              <Title>Motivation</Title>
             </Row>
           </Column>
         </Row>
